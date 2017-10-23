@@ -14,6 +14,16 @@
 		tooltip.style('display', 'block');
 	};
 
+	function addHighlight(el){
+		d3.select(el)
+		.style('stroke', 'black');
+	}
+
+	function removeHighlight(el){
+		d3.select(el)
+		.style('stroke', 'transparent');
+	}
+
 	var graphHeight = 500;
 
 	var barWidth = 3;
@@ -136,14 +146,33 @@
 		.style('fill', maleColor)
 		.select(function() {return this.parentNode});
 
-
 		item.on('mouseover', function(d){
-			updateTooltip(d)
+			addHighlight(this);
 		});
 		second.on('mouseover', function(d){
-			updateTooltip(d)
+			addHighlight(this);
 		});
 		third.on('mouseover', function(d){
+			addHighlight(this);
+		});
+
+		item.on('mouseout', function(d){
+			removeHighlight(this);
+		});
+		second.on('mouseout', function(d){
+			removeHighlight(this);
+		});
+		third.on('mouseout', function(d){
+			removeHighlight(this);
+		});
+
+		item.on('mousedown', function(d){
+			updateTooltip(d)
+		});
+		second.on('mousedown', function(d){
+			updateTooltip(d)
+		});
+		third.on('mousedown', function(d){
 			updateTooltip(d)
 		});
 	});

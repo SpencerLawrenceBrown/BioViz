@@ -3,10 +3,10 @@ h1 {
   text-align: center;
 }
 #chart {
-  height: 10px;
+  height: 300px;
   margin: 0 auto;                            /* NEW */
   position: relative;
-  width: 10px;
+  width: 300px;
 }
 #oncograph{
   width: 100%;
