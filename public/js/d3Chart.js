@@ -21,7 +21,7 @@
 		.attr('width', svgWidth)
 		.attr('height', svgWidth)
 		.append('g')
-		.attr('transform', 'translate(' + (pieWidth/2) + "," + (pieWidth/2) + ')');
+		.attr('transform', 'translate(' + (svgWidth/2) + "," + (pieWidth/2) + ')');
 
 	var arc = d3.arc().innerRadius(0).outerRadius(pieWidth/2);
 
@@ -124,7 +124,7 @@
 	
 
 	/* D3 SVG Build */
-	d3.tsv('TCGA_GTEX_DATA.txt', function(err, dataset){
+	d3.tsv('/data/TCGA_GTEX_DATA.txt', function(err, dataset){
 
 		//Hide loader
 		d3.select("#chart").classed("spinner", false);

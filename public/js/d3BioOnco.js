@@ -116,7 +116,7 @@
 
 
 	/* D3 SVG Build */
-	d3.tsv('TCGA_GTEX_DATA.txt', function(err, dataset){
+	d3.tsv('/data/TCGA_GTEX_DATA.txt', function(err, dataset){
 
 		//Remove loader
 		d3.select("#oncograph").classed("spinner", false);
