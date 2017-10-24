@@ -1,19 +1,21 @@
 (function() {
 
+	/* Chart Variables */
+	//Set legend and onco colors
 	var legend = {
 		"Male" : "blue",
 		"Female" : "red",
 		"Both" : "block"
 	};
+	var femaleColor = legend["Female"];
+	var maleColor = legend["Male"];
 
+	//Sizing
 	var graphHeight = 500;
 
 	var barWidth = 3;
 	var barHeight = 50;
 	var barPadding = 1;
-
-	var femaleColor = legend["Female"];
-	var maleColor = legend["Male"];
 
 	var legendRectSize = 10;
 	var legendPaddingSize = 5;
@@ -22,39 +24,20 @@
 	var legendLabelIndex = 0;
 	var legendColorIndex = 1;
 
-	function updateTooltip(el, d){
-		for (property in d){
-			tooltip.select('.' + property).html("<p>" + property + ": " + d[property] + "</p>");
-		}
-		tooltip.style('display', 'block');
 
-		//update selected viz
-		var selected = svg.selectAll(".selected")
-			.classed('selected', false)
-
-		d3.select(el)
-			.classed('selected', true)
-
-	};
-	function addHighlight(el){
-		d3.select(el)
-		.classed('highlighted', true)
-	};
-	function removeHighlight(el){
-		d3.select(el)
-		.classed('highlighted', false)
-	};
-
-
+	/*Base SVG Elements*/
+	//SVG base
 	var svg = d3.select("#oncograph")
 		.append('svg')
 		.attr('height', barHeight);
 
-	var tooltip = d3.select('#oncograph')
-	.append('div')
-	.attr('class', 'tooltip');
+	//Info display
+	var info = d3.select('#oncograph')
+		.append('div')
+		.attr('class', 'info');
 
-	var legend = tooltip.append('svg')
+	//Oncograph legend
+	var legend = info.append('svg')
 		.attr('class', 'legend')
 		.attr('height', legendHeight)
 		.selectAll('p')
@@ -68,30 +51,81 @@
 			return 'translate(' + left + ',' + top + ')';
 		});
 	
+	//Create each color rect
 	legend.append('rect')
 		.attr('width', legendRectSize)
 		.attr('height', legendRectSize)
 		.style('fill', function(d){return d[legendColorIndex]});
-
 	legend.append('text')
 		.attr('x', legendRectSize + legendPaddingSize)
 		.attr('y', legendRectSize)
 		.text(function(d){return d[legendLabelIndex]});
 
-	tooltip.append('div')
-	.attr('class', 'ID');
+	//Add the properties that should appear when an id is selected
+	info.append('div')
+		.attr('class', 'ID');
+	info.append('div')
+		.attr('class', 'GENE');
+	info.append('div')
+		.attr('class', 'ENSEMBLE');
 
-	tooltip.append('div')
-	.attr('class', 'GENE');
 
-	tooltip.append('div')
-	.attr('class', 'ENSEMBLE');
+	/*Helper Functions*/
+	/**
+	 * Updates the information in the info section
+	 * @param  {element} el 	selected element
+	 * @param  {d3 data} d  	element data passed in by D3
+	 */
+	function updateInfo(el, d){
 
+		for (property in d){ //easy to add new data properties
+			
+			info.select('.' + property).html("<p>" + property + ": " + d[property] + "</p>");
+
+		}
+
+		//Show tool tip
+		info.style('display', 'block');
+
+		//update classes for appropriate display
+		var selected = svg.selectAll(".selected")
+			.classed('selected', false);
+
+		d3.select(el)
+			.classed('selected', true);
+
+	}; //updateInfo()
+
+
+	/**
+	 * manages highlight classes
+	 * @param  {element} el 	selected element
+	 */
+	function addHighlight(el){
+
+		d3.select(el)
+		.classed('highlighted', true);
+
+	}; //addHighlight()
+	function removeHighlight(el){
+
+		d3.select(el)
+		.classed('highlighted', false);
+
+	}; //removeHighlight()
+
+
+	/* D3 SVG Build */
 	d3.tsv('TCGA_GTEX_DATA.txt', function(err, dataset){
-		//Set the width of the svg
+
+		//Remove loader
+		d3.select("#oncograph").classed("spinner", false);
+
+		//Set the width of the svg based on the number of items in the data set -- plus 10 just leaves a little buffer at the end
 		var svgWidth = dataset.length * barWidth + dataset.length * barPadding + 10;
 		svg.attr('width', svgWidth);
 
+		//Build the Oncograph
 		var onco = svg.selectAll('rect')
 		.data(dataset)
 		.enter()
@@ -110,17 +144,16 @@
 			}
 		});
 
+		//Mouse events
 		onco.on('mouseover', function(d){
 			addHighlight(this);
 		});
-
 		onco.on('mouseout', function(d){
 			removeHighlight(this);
 		});
-
 		onco.on('mousedown', function(d){
-			updateTooltip(this, d)
+			updateInfo(this, d)
 		});
-	});
 
+	}); //d3.tsv()
 })();

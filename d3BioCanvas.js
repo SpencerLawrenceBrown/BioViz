@@ -1,4 +1,4 @@
-(function() {
+/* From https://stephanwagner.me/only-css-loading-spinner */(function() {
 
 	var dataset = [
 		{ "ID": "CA-CS-19-58352282-58352555.8367.1", "GENE": "A1BG", "ENSEMBLE": "ENST00000600966.1", "TCGA_AML_FEMALE": "100", "TCGA_AML_MALE": "0", "TCGA_DEAD": "0", "TCGA_ALIVE": "100", "GTEX_BLOOD": "0", "GTEX_BLOOD_VESSEL": "0.4", "GTEX_BONE_MARROW": "0", "GTEX_MUSCLE": "0" },

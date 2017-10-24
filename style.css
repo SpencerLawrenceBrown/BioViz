@@ -4,7 +4,7 @@ h1 {
 }
 #chart {
   height: 300px;
-  margin: 0 auto;                            /* NEW */
+  margin: 0 auto;
   position: relative;
   width: 300px;
 }
@@ -13,10 +13,10 @@ h1 {
   overflow-x: scroll;
   margin-bottom: 150px;
 }
-
 #bar{
 	position: absolute;
 	z-index: 2;
+	display: none;
 }
 .barGraph{
 	display: none;
@@ -24,11 +24,10 @@ h1 {
 .barGraph.shouldDisplay{
 	display: block;
 }
-
 .highlighted, .selected{
 	stroke: green;
 }
-.tooltip {
+.info {
 	position: absolute;
 	margin-top: 20px;
 	width: 400px;
@@ -37,4 +36,24 @@ h1 {
 	padding: 5px;
 	text-align: left;
 	z-index: 2;
+}
+
+/* From https://stephanwagner.me/only-css-loading-spinner */
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 47%;
+  left: 43%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border-top: 2px solid #07d;
+  border-right: 2px solid transparent;
+  animation: spinner .6s linear infinite;
 }
