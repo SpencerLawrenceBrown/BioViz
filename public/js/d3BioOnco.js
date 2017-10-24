@@ -92,6 +92,8 @@
 			.classed('selected', false);
 
 		d3.select(el)
+			.select(function() {return el.parentNode})
+			.select('.highlight')
 			.classed('selected', true);
 
 	}; //updateInfo()
@@ -104,13 +106,17 @@
 	function addHighlight(el){
 
 		d3.select(el)
-		.classed('highlighted', true);
+			.select(function() {return el.parentNode})
+			.select('.highlight')
+			.classed('highlighted', true);
 
 	}; //addHighlight()
 	function removeHighlight(el){
 
 		d3.select(el)
-		.classed('highlighted', false);
+			.select(function() {return el.parentNode})
+			.select('.highlight')
+			.classed('highlighted', false);
 
 	}; //removeHighlight()
 
@@ -130,7 +136,8 @@
 		.data(dataset)
 		.enter()
 		.append('g')
-		.append('rect')
+
+		var bars = onco.append('rect')
 		.attr('width', barWidth)
 		.attr('height', barHeight)
 		.attr('x', function(d,i){ return barWidth * i + barPadding * i})
@@ -144,14 +151,21 @@
 			}
 		});
 
+		onco.append('rect')
+			.attr('width', barWidth)
+			.attr('height', 2)
+			.attr('x', function(d,i){ return barWidth * i + barPadding * i})
+			.attr('y', function(d){ return barHeight - 2})
+			.attr('class', 'highlight');
+
 		//Mouse events
-		onco.on('mouseover', function(d){
+		bars.on('mouseover', function(d){
 			addHighlight(this);
 		});
-		onco.on('mouseout', function(d){
+		bars.on('mouseout', function(d){
 			removeHighlight(this);
 		});
-		onco.on('mousedown', function(d){
+		bars.on('mousedown', function(d){
 			updateInfo(this, d)
 		});
 

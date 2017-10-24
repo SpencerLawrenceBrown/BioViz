@@ -24,8 +24,11 @@ h1 {
 .barGraph.shouldDisplay{
 	display: block;
 }
+.highlight{
+  fill: transparent;
+}
 .highlighted, .selected{
-	stroke: green;
+	fill: yellow;
 }
 .info {
 	position: absolute;
