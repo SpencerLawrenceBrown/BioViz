@@ -127,6 +127,11 @@
 		//Remove loader
 		d3.select("#oncograph").classed("spinner", false);
 
+		//Sort
+		dataset.sort(function(x,y){
+			return x.TCGA_AML_FEMALE - y.TCGA_AML_FEMALE;
+		});
+
 		//Set the width of the svg based on the number of items in the data set -- plus 10 just leaves a little buffer at the end
 		var svgWidth = dataset.length * barWidth + dataset.length * barPadding + 10;
 		svg.attr('width', svgWidth);

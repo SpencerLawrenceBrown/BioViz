@@ -38,7 +38,6 @@
 	function statsSet(label, color){
 
 		this.count = 0;
-		this.totalIds = 0;
 		this.label = label;
 		this.color = color;
 		this.tissue = {}
@@ -73,7 +72,6 @@
 		if (val > 0){
 
 			stats.count += val;
-			stats.totalIds += 1;
 
 			for (tissue in tissues){
 
@@ -117,6 +115,7 @@
 
 		});
 
+
 		//Create an array that is easy for d3 to iterate over
 		return Array(aliveStats, deadStats);
 
@@ -138,6 +137,10 @@
 			.align([0.5])
 			.paddingInner([0.1])
 			.paddingOuter([0.1]);
+
+		var y = d3.scaleLinear()
+			.range([barGraphSize, 0])
+			.domain([0, dataset.length]);
 
 		//The y-axis ticks should go from 0 -> 100. The values are are scaled accordingly by a function created when each graph is created.
 		var yVizScale = d3.scaleLinear()
@@ -219,19 +222,20 @@
 		barGraph.selectAll("bar")
 			.data(function(d){
 				//Create a y scale function per each data point -- this ensures that each graph's max value is determined by the statsSets totalIds count
-				var scaleFunction = d3.scaleLinear()
-					.range([barGraphSize, 0])
-					.domain([0, d.totalIds]);
+				// var scaleFunction = d3.scaleLinear()
+				// 	.range([barGraphSize, 0])
+				// 	.domain([0, d.totalIds]);
 
-				return Object.keys(d.tissue).map(function(k){return {"name": k , "value": d.tissue[k], "total": d.totalIds, "scale" : scaleFunction}})
+				// return Object.keys(d.tissue).map(function(k){return {"name": k , "value": d.tissue[k], "total": d.totalIds, "scale" : scaleFunction}})
+				return Object.keys(d.tissue).map(function(k){return {"name": k , "value": d.tissue[k]}})
 			})
 			.enter()
 			.append("g")
 			.append("rect")
 			.attr('x', function(d,i){return x(d.name)})
 			.attr('width', function(d){return x.bandwidth()})
-			.attr('y', function(d){return(d.scale(d.value))})
-			.attr('height', function(d){ return barGraphSize - d.scale(d.value)})
+			.attr('y', function(d){return(y(d.value))})
+			.attr('height', function(d){ return barGraphSize - y(d.value)})
 			.style('fill', function(d,i){return color(i)});
 
 		//Build the pie chart
