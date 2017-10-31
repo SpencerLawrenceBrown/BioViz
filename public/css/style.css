@@ -55,6 +55,9 @@ h1 {
 .info h2 {
   margin: 0px;
 }
+.info .legendTitle {
+  font-size: 12px;
+}
 .info .legendBold {
   font-weight: 700;
 }

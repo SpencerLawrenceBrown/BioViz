@@ -2,13 +2,13 @@
 
 	/* Chart Variables */
 	//Set legend and onco colors
-	var legend = {
+	var legendData = {
 		"Male" : "blue",
 		"Female" : "red",
 		"Both" : "block"
 	};
-	var femaleColor = legend["Female"];
-	var maleColor = legend["Male"];
+	var femaleColor = legendData["Female"];
+	var maleColor = legendData["Male"];
 
 	//Sizing
 	var graphHeight = 500;
@@ -20,7 +20,7 @@
 	var legendRectSize = 10;
 	var legendPaddingSize = 5;
 	var legendTextMargin = 40;
-	var legendHeight = legendRectSize + legendPaddingSize * 2;
+	var legendHeight = legendRectSize + legendPaddingSize * 2 + 20;
 	var legendLabelIndex = 0;
 	var legendColorIndex = 1;
 
@@ -36,31 +36,37 @@
 		.append('div')
 		.attr('class', 'info');
 
-	info.append('div')
-		.attr('class', 'legendBold')
-		.html("<h2>Legend</h2>");
-
 	//Oncograph legend
 	var legend = info.append('svg')
 		.attr('class', 'legend')
-		.attr('height', legendHeight)
-		.selectAll('p')
-		.data(Object.keys(legend).map(function(k){return [k , legend[k]]}))
+		.attr('height', legendHeight);
+
+	legend.append('text')
+		.text('Legend')
+		.attr('class', 'legendTitle legendBold')
+		.attr('transform', function(d,i){
+			var left = 0;
+			var top  = 10;
+			return 'translate(' + left + ',' + top + ')';
+		});
+
+	var legendItems = legend.selectAll('p')
+		.data(Object.keys(legendData).map(function(k){return [k , legendData[k]]}))
 		.enter()
 		.append('g')
 		.attr('class', 'legendValue')
 		.attr('transform', function(d,i){
 			var left = i * (legendRectSize + legendPaddingSize + legendTextMargin);
-			var top  = legendPaddingSize;
+			var top  = legendPaddingSize + 15;
 			return 'translate(' + left + ',' + top + ')';
 		});
 	
 	//Create each color rect
-	legend.append('rect')
+	legendItems.append('rect')
 		.attr('width', legendRectSize)
 		.attr('height', legendRectSize)
 		.style('fill', function(d){return d[legendColorIndex]});
-	legend.append('text')
+	legendItems.append('text')
 		.attr('x', legendRectSize + legendPaddingSize)
 		.attr('y', legendRectSize)
 		.text(function(d){return d[legendLabelIndex]});
