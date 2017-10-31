@@ -115,6 +115,10 @@
 
 		});
 
+		var total = aliveStats.count + deadStats.count;
+		aliveStats.total = total;
+		deadStats.total = total;
+
 
 		//Create an array that is easy for d3 to iterate over
 		return Array(aliveStats, deadStats);
@@ -149,8 +153,8 @@
 
 		//Creates both axes
 		var xaxis = d3.axisBottom(x)
-			.tickSizeInner(1)
-			.tickSizeOuter(4)
+			.tickSizeInner(5)
+			.tickSizeOuter(0)
 		var yaxis = d3.axisLeft(yVizScale)
 			.tickSizeInner(1)
 			.tickSizeOuter(4)
@@ -219,24 +223,29 @@
 
 
         //Create all the bars in each graph
-		barGraph.selectAll("bar")
+		var bars = barGraph.selectAll("bar")
 			.data(function(d){
 				//Create a y scale function per each data point -- this ensures that each graph's max value is determined by the statsSets totalIds count
-				// var scaleFunction = d3.scaleLinear()
-				// 	.range([barGraphSize, 0])
-				// 	.domain([0, d.totalIds]);
-
-				// return Object.keys(d.tissue).map(function(k){return {"name": k , "value": d.tissue[k], "total": d.totalIds, "scale" : scaleFunction}})
-				return Object.keys(d.tissue).map(function(k){return {"name": k , "value": d.tissue[k]}})
+				return Object.keys(d.tissue).map(function(k){return {"name": k , "value": d.tissue[k], "per": Math.round((d.tissue[k]/dataset.length) * 100)}})
 			})
 			.enter()
-			.append("g")
-			.append("rect")
+			.append("g");
+
+		bars.append("rect")
 			.attr('x', function(d,i){return x(d.name)})
 			.attr('width', function(d){return x.bandwidth()})
 			.attr('y', function(d){return(y(d.value))})
 			.attr('height', function(d){ return barGraphSize - y(d.value)})
 			.style('fill', function(d,i){return color(i)});
+
+		bars.append("text")
+			.text(function(d){
+				return d.per
+			})
+			.attr('class', 'barValue')
+			.attr('x', function(d,i){return x(d.name) + x.bandwidth()/2})
+			.attr('y', function(d){return y(d.value) + 20})
+
 
 		//Build the pie chart
 		var path = svg.selectAll('path')
@@ -259,8 +268,8 @@
 			.attr('transform', function(d,i){
 				var height = legendRectWidth + legendRectSpacing;
 				var offset = height * totalStats.length / 2;
-				var horz = 0;
-				var vert = pieWidth/2 + 5 + legendRectWidth * i + legendRectSpacing * i;
+				var horz = i * (legendRectWidth + legendRectSpacing + 70) - pieWidth/4 - 10;
+				var vert = pieWidth/2 + legendRectSpacing;
 				return 'translate(' + horz + ',' + vert + ')';
 			});
 
@@ -272,7 +281,11 @@
 		legend.append("text")
 			.attr('x', legendRectWidth + legendRectSpacing)
 			.attr('y', legendRectWidth)
-			.text(function(d){return d.label;});
+			.style('font-size', '11px')
+			.text(function(d){
+				console.log(d);
+				return d.label + " - " + Math.round((d.count/d.total) * 100) + "%";
+			});
 		
 		//Mouse events
 		path.on('mousemove', function(d){
@@ -287,7 +300,7 @@
 			displayGraph(this, bothGraphs);
 
 			//Light highlight of the section of the pie currently being graphed
-			d3.select(this).style('stroke', 'black')
+			d3.select(this).style('stroke', 'black');
 
 		});
 

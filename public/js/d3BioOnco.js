@@ -36,6 +36,10 @@
 		.append('div')
 		.attr('class', 'info');
 
+	info.append('div')
+		.attr('class', 'legendBold')
+		.html("<h2>Legend</h2>");
+
 	//Oncograph legend
 	var legend = info.append('svg')
 		.attr('class', 'legend')
@@ -80,7 +84,7 @@
 
 		for (property in d){ //easy to add new data properties
 			
-			info.select('.' + property).html("<p>" + property + ": " + d[property] + "</p>");
+			info.select('.' + property).html("<p><span class='legendBold'>" + property + ":</span> " + d[property] + "</p>");
 
 		}
 

@@ -1,68 +1,73 @@
-body {
+@chartSize: 300px;
+@barSize: 360px;
+
+body{
   font-family: 'Open Sans', sans-serif;
 }
+
 h1 {
   font-size: 14px;
   text-align: center;
 }
 #chart {
-  height: 300px;
+  height: @chartSize;
   margin: 0 auto;
   position: relative;
-  width: 300px;
+  width: @chartSize;
 }
-#oncograph {
+#oncograph{
   width: 100%;
   overflow-x: scroll;
   margin-bottom: 150px;
 }
-#bar {
-  position: absolute;
-  z-index: 2;
+#bar{
+	position: absolute;
+	z-index: 2;
   display: none;
-  height: 360px;
-  width: 360px;
+  height: @barSize;
+  width: @barSize;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.46);
+
+  .barValue{
+    text-anchor: middle;
+    fill: white;
+    font-size: 0.8em;
+  }
 }
-#bar .barValue {
-  text-anchor: middle;
-  fill: white;
-  font-size: 0.8em;
+.barGraph{
+	display: none;
 }
-.barGraph {
-  display: none;
+.barGraph.shouldDisplay{
+	display: block;
 }
-.barGraph.shouldDisplay {
-  display: block;
-}
-.highlight {
+.highlight{
   fill: transparent;
 }
-.highlighted,
-.selected {
-  fill: yellow;
+.highlighted, .selected{
+	fill: yellow;
 }
 .info {
-  position: absolute;
-  margin-top: 5px;
-  width: 400px;
-  color: #333;
-  font-size: 10px;
-  padding: 5px;
-  text-align: left;
-  z-index: 2;
+	position: absolute;
+	margin-top: 5px;
+	width: 400px;
+	color: #333;
+	font-size: 10px;
+	padding: 5px;
+	text-align: left;
+	z-index: 2;
+
+  h2{
+    margin: 0px;
+  }
+
+  .legendBold{
+    font-weight: 700;
+  }
 }
-.info h2 {
-  margin: 0px;
-}
-.info .legendBold {
-  font-weight: 700;
-}
+
 /* From https://stephanwagner.me/only-css-loading-spinner */
 @keyframes spinner {
-  to {
-    transform: rotate(360deg);
-  }
+  to {transform: rotate(360deg);}
 }
 .spinner:before {
   content: '';
